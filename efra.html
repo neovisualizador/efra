@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MenteEduca - Curso de Salud Mental</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Estilos globales para la barra de desplazamiento */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        /* Animación suave */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-50 font-sans text-slate-800 pb-12">
+
+    <!-- Navbar Superior -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="brain" class="h-8 w-8 text-indigo-600"></i>
+                    <span class="font-bold text-xl text-slate-900 tracking-tight">MenteEduca</span>
+                </div>
+                <div class="hidden sm:flex items-center gap-4">
+                    <div class="text-sm font-medium text-slate-500">Mi Progreso</div>
+                    <div class="w-32 h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div class="w-1/4 h-full bg-indigo-600 rounded-full"></div>
+                    </div>
+                    <span class="text-sm font-bold text-indigo-600">25%</span>
+                    <div class="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold ml-4 border-2 border-indigo-200">
+                        K
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 flex flex-col lg:flex-row gap-8">
+        
+        <!-- Contenido Principal -->
+        <main class="w-full lg:w-2/3 xl:w-3/4 flex flex-col gap-6">
+            
+            <!-- Título y Breadcrumb -->
+            <div>
+                <nav class="text-sm font-medium text-slate-500 mb-2 flex items-center gap-2">
+                    <span>Cursos</span>
+                    <span>/</span>
+                    <span>Salud Mental</span>
+                    <span>/</span>
+                    <span class="text-indigo-600">Módulo 1</span>
+                </nav>
+                <h1 id="lesson-main-title" class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">
+                    Introducción a los Trastornos Mentales y Psicoeducación
+                </h1>
+            </div>
+
+            <!-- Área de Reproductor (Video o Cuestionario) -->
+            <div id="video-container" class="w-full aspect-video bg-black rounded-xl overflow-hidden shadow-lg border border-slate-200 relative">
+                <iframe 
+                    id="yt-iframe"
+                    class="absolute top-0 left-0 w-full h-full"
+                    src="https://www.youtube.com/embed/rw2rQ5qgDmo?si=FnmqTURgmIJ3_DxI" 
+                    title="YouTube video player" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    referrerpolicy="strict-origin-when-cross-origin" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+
+            <div id="quiz-container" class="hidden w-full aspect-video bg-slate-100 rounded-xl shadow-inner border border-slate-200 flex flex-col items-center justify-center text-center p-8">
+                <i data-lucide="file-text" class="h-16 w-16 text-indigo-300 mb-4"></i>
+                <h2 id="quiz-title" class="text-2xl font-bold text-slate-800">Cuestionario</h2>
+                <p class="text-slate-500 mt-2">Este contenido es un cuestionario práctico. Haz clic en el botón de abajo para comenzar.</p>
+                <button class="mt-6 px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+                    Comenzar Cuestionario
+                </button>
+            </div>
+
+            <!-- Navegación de Pestañas -->
+            <div class="border-b border-slate-200">
+                <nav class="flex space-x-8" id="tabs-nav">
+                    <button onclick="setTab('descripcion')" id="tab-btn-descripcion" class="py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-colors border-indigo-600 text-indigo-600">
+                        <i data-lucide="file-text" class="h-4 w-4"></i> Descripción del Video
+                    </button>
+                    <button onclick="setTab('recursos')" id="tab-btn-recursos" class="py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-colors border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300">
+                        <i data-lucide="book-open" class="h-4 w-4"></i> Recursos Descargables
+                    </button>
+                    <button onclick="setTab('comentarios')" id="tab-btn-comentarios" class="py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-colors border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300">
+                        <i data-lucide="message-square" class="h-4 w-4"></i> Comentarios (12)
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Contenidos de las Pestañas -->
+            <div id="tab-content-descripcion" class="fade-in space-y-8">
+                
+                <!-- Lección 1 Contenido -->
+                <div id="desc-lesson-1" class="space-y-8">
+                    <!-- Creadores Card -->
+                    <section class="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
+                        <h2 class="text-xl font-bold flex items-center gap-2 text-slate-800 mb-4">
+                            <i data-lucide="users" class="text-indigo-500"></i> ¿Quiénes son los creadores?
+                        </h2>
+                        <p class="text-slate-600 leading-relaxed text-base">
+                            El video es presentado por <strong>Karina</strong>, licenciada en psicopedagogía, docente y escritora. Ella y su esposo <strong>Efraín</strong>, quien tiene un diagnóstico de trastorno esquizoafectivo, crearon el proyecto para psicoeducar sobre salud mental, compartiendo sus vivencias en primera persona 
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 cursor-pointer hover:bg-indigo-200 transition-colors mx-1">00:01</span>.
+                        </p>
+                    </section>
+
+                    <!-- Conceptos Clave -->
+                    <section>
+                        <h2 class="text-xl font-bold flex items-center gap-2 text-slate-800 mb-4">
+                            <i data-lucide="book-open" class="text-indigo-500"></i> Conceptos Clave
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 hover:border-indigo-100 transition-colors">
+                                <h3 class="font-bold text-lg text-indigo-900 mb-2">Trastornos Mentales</h3>
+                                <p class="text-slate-600 text-sm leading-relaxed">
+                                    Son afecciones que impactan la cognición, emoción y comportamiento, interfiriendo con la capacidad de funcionamiento en la vida diaria 
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 cursor-pointer hover:bg-indigo-200 transition-colors mx-1">04:14</span>. 
+                                    Pueden variar desde síntomas leves hasta condiciones graves y debilitantes 
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 cursor-pointer hover:bg-indigo-200 transition-colors mx-1">04:29</span>.
+                                </p>
+                            </div>
+                            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 hover:border-indigo-100 transition-colors">
+                                <h3 class="font-bold text-lg text-indigo-900 mb-2">Psicoeducación</h3>
+                                <p class="text-slate-600 text-sm leading-relaxed">
+                                    Es un enfoque terapéutico que proporciona información y orientación sobre salud mental 
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 cursor-pointer hover:bg-indigo-200 transition-colors mx-1">00:52</span>. 
+                                    Su objetivo es empoderar a los pacientes y sus familias para que comprendan mejor sus condiciones y tomen decisiones informadas sobre su tratamiento y autocuidado 
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 cursor-pointer hover:bg-indigo-200 transition-colors mx-1">01:03</span>.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Los 3 Pilares -->
+                    <section>
+                        <h2 class="text-xl font-bold flex items-center gap-2 text-slate-800 mb-4">
+                            <i data-lucide="award" class="text-indigo-500"></i> Los 3 Pilares del Tratamiento
+                        </h2>
+                        <p class="text-slate-600 mb-4">Según el video, el manejo de los trastornos mentales se basa en:</p>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <div class="flex-1 bg-indigo-50 rounded-xl p-5 border border-indigo-100 text-center relative overflow-hidden group">
+                                <div class="absolute top-0 right-0 w-16 h-16 bg-white opacity-20 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                                <div class="mx-auto bg-white w-12 h-12 rounded-full flex items-center justify-center text-indigo-600 mb-3 shadow-sm">
+                                    <i data-lucide="activity" class="h-6 w-6"></i>
+                                </div>
+                                <h3 class="font-bold text-indigo-900 text-sm">Tratamiento Psicofarmacológico</h3>
+                                <p class="text-indigo-600 text-xs mb-2">(medicación)</p>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 cursor-pointer hover:bg-indigo-200 transition-colors mx-1">03:54</span>
+                            </div>
+                            <div class="flex-1 bg-indigo-50 rounded-xl p-5 border border-indigo-100 text-center relative overflow-hidden group">
+                                <div class="absolute top-0 right-0 w-16 h-16 bg-white opacity-20 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                                <div class="mx-auto bg-white w-12 h-12 rounded-full flex items-center justify-center text-indigo-600 mb-3 shadow-sm">
+                                    <i data-lucide="brain" class="h-6 w-6"></i>
+                                </div>
+                                <h3 class="font-bold text-indigo-900 text-sm">Psicoterapia</h3>
+                                <p class="text-indigo-600 text-xs mb-2">Apoyo profesional</p>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 cursor-pointer hover:bg-indigo-200 transition-colors mx-1">04:00</span>
+                            </div>
+                            <div class="flex-1 bg-indigo-50 rounded-xl p-5 border border-indigo-100 text-center relative overflow-hidden group">
+                                <div class="absolute top-0 right-0 w-16 h-16 bg-white opacity-20 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                                <div class="mx-auto bg-white w-12 h-12 rounded-full flex items-center justify-center text-indigo-600 mb-3 shadow-sm">
+                                    <i data-lucide="users" class="h-6 w-6"></i>
+                                </div>
+                                <h3 class="font-bold text-indigo-900 text-sm">Psicoeducación</h3>
+                                <p class="text-indigo-600 text-xs mb-2">Paciente y familia</p>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 cursor-pointer hover:bg-indigo-200 transition-colors mx-1">04:02</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Trastorno vs Enfermedad -->
+                    <section class="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
+                        <h2 class="text-xl font-bold flex items-center gap-2 text-slate-800 mb-4">
+                            <i data-lucide="activity" class="text-indigo-500"></i> Trastorno vs. Enfermedad
+                        </h2>
+                        <div class="space-y-4">
+                            <div class="flex gap-4 items-start border-l-4 border-indigo-500 pl-4">
+                                <div>
+                                    <h3 class="font-bold text-lg text-slate-800">Trastorno</h3>
+                                    <p class="text-slate-600 text-sm">
+                                        Se refiere a un patrón disfuncional de comportamientos, pensamientos o emociones que causan malestar o deterioro en el funcionamiento personal o social 
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 cursor-pointer hover:bg-indigo-200 transition-colors mx-1">06:22</span>.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 items-start border-l-4 border-emerald-500 pl-4">
+                                <div>
+                                    <h3 class="font-bold text-lg text-slate-800">Enfermedad</h3>
+                                    <p class="text-slate-600 text-sm">
+                                        Es una condición médica que interfiere con el funcionamiento normal del cuerpo y suele presentar signos y síntomas específicos 
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 cursor-pointer hover:bg-indigo-200 transition-colors mx-1">06:56</span>. 
+                                        A diferencia de los trastornos, las enfermedades no se limitan al ámbito de la salud mental 
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 cursor-pointer hover:bg-indigo-200 transition-colors mx-1">07:22</span>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Causas y Factores de Riesgo -->
+                    <section>
+                        <h2 class="text-xl font-bold flex items-center gap-2 text-slate-800 mb-4">
+                            <i data-lucide="shield-alert" class="text-indigo-500"></i> Causas y Factores de Riesgo
+                        </h2>
+                        <p class="text-slate-600 mb-4">El desarrollo de trastornos mentales puede deberse a:</p>
+                        <div class="space-y-3">
+                            <div class="flex items-start gap-3 bg-white p-4 rounded-lg border border-slate-100 shadow-sm">
+                                <div class="mt-1 flex-shrink-0 text-indigo-500"><i data-lucide="check-circle" class="h-5 w-5"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 text-sm">Factores Genéticos</h4>
+                                    <p class="text-slate-600 text-sm">Existe evidencia de que muchos trastornos tienen una base hereditaria <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 cursor-pointer hover:bg-indigo-200 transition-colors mx-1">08:21</span></p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 bg-white p-4 rounded-lg border border-slate-100 shadow-sm">
+                                <div class="mt-1 flex-shrink-0 text-indigo-500"><i data-lucide="check-circle" class="h-5 w-5"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 text-sm">Factores Ambientales</h4>
+                                    <p class="text-slate-600 text-sm">Experiencias traumáticas en la infancia (abuso), estrés crónico, pobreza o violencia comunitaria <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 cursor-pointer hover:bg-indigo-200 transition-colors mx-1">08:36</span></p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 bg-white p-4 rounded-lg border border-slate-100 shadow-sm">
+                                <div class="mt-1 flex-shrink-0 text-indigo-500"><i data-lucide="check-circle" class="h-5 w-5"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800 text-sm">Factores Psicosociales</h4>
+                                    <p class="text-slate-600 text-sm">Falta de apoyo social, aislamiento, discriminación y conflictos interpersonales <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 cursor-pointer hover:bg-indigo-200 transition-colors mx-1">09:02</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Lección 2 Contenido -->
+                <div id="desc-lesson-2" class="hidden bg-white p-8 rounded-xl shadow-sm border border-slate-100 text-center">
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Apuntes de la lección</h3>
+                    <p class="text-slate-600">
+                        Aún no se ha cargado la descripción de este segundo video. 
+                        (¡Pásame el texto de esta clase y lo maquetaré igual de bonito que el primero!)
+                    </p>
+                </div>
+
+                <!-- Lección 3 Contenido (Cuestionario) -->
+                <div id="desc-lesson-3" class="hidden bg-white p-8 rounded-xl shadow-sm border border-slate-100 text-center">
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Instrucciones del Cuestionario</h3>
+                    <p class="text-slate-600">
+                        Lee atentamente cada pregunta antes de responder. Tienes intentos ilimitados.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Placeholders Pestañas Adicionales -->
+            <div id="tab-content-recursos" class="hidden fade-in bg-white p-8 text-center rounded-xl border border-slate-200">
+                <i data-lucide="file-text" class="h-12 w-12 text-slate-300 mx-auto mb-4"></i>
+                <h3 class="text-lg font-bold text-slate-700">Recursos de la clase</h3>
+                <p class="text-slate-500 mt-2">No hay recursos adicionales adjuntos a esta lección.</p>
+            </div>
+            
+            <div id="tab-content-comentarios" class="hidden fade-in bg-white p-8 text-center rounded-xl border border-slate-200">
+                <i data-lucide="message-square" class="h-12 w-12 text-slate-300 mx-auto mb-4"></i>
+                <h3 class="text-lg font-bold text-slate-700">Sección de comentarios</h3>
+                <p class="text-slate-500 mt-2">Únete a la discusión. Los comentarios están habilitados para alumnos inscritos.</p>
+            </div>
+
+        </main>
+
+        <!-- Barra Lateral (Lista de Reproducción) -->
+        <aside class="w-full lg:w-1/3 xl:w-1/4">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 sticky top-24 overflow-hidden">
+                <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+                    <h2 class="font-bold text-slate-800 text-lg">Contenido del curso</h2>
+                    <span class="text-xs font-semibold bg-indigo-100 text-indigo-800 px-2 py-1 rounded">1 / 5</span>
+                </div>
+                
+                <div class="divide-y divide-slate-100 max-h-[600px] overflow-y-auto custom-scrollbar">
+                    
+                    <!-- Sección 1 -->
+                    <div>
+                        <button class="w-full p-4 flex justify-between items-center bg-white hover:bg-slate-50 transition-colors">
+                            <span class="font-bold text-sm text-slate-800">Sección 1: Introducción</span>
+                            <i data-lucide="chevron-down" class="h-4 w-4 text-slate-500"></i>
+                        </button>
+                        <div class="bg-slate-50 pb-2" id="lessons-list">
+                            <!-- Las lecciones se insertan aquí vía JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Sección 2 -->
+                    <div>
+                        <button class="w-full p-4 flex justify-between items-center bg-white hover:bg-slate-50 transition-colors">
+                            <span class="font-bold text-sm text-slate-800">Sección 2: Diagnóstico y Tratamiento</span>
+                            <i data-lucide="chevron-down" class="h-4 w-4 text-slate-500"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Sección 3 -->
+                    <div>
+                        <button class="w-full p-4 flex justify-between items-center bg-white hover:bg-slate-50 transition-colors">
+                            <span class="font-bold text-sm text-slate-800">Sección 3: Estrategias de Afrontamiento</span>
+                            <i data-lucide="chevron-down" class="h-4 w-4 text-slate-500"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- Script de Lógica Principal -->
+    <script>
+        // Datos
+        const lessons = [
+            {
+                id: 1,
+                title: "Introducción a los Trastornos Mentales y Psicoeducación",
+                duration: "11:30",
+                videoId: "rw2rQ5qgDmo",
+                type: "video"
+            },
+            {
+                id: 2,
+                title: "El rol de la familia en la recuperación",
+                duration: "14:15",
+                videoId: "tGU0w2fTfw0",
+                type: "video"
+            },
+            {
+                id: 3,
+                title: "Cuestionario: Conceptos Básicos",
+                duration: "5 preguntas",
+                type: "quiz"
+            }
+        ];
+
+        let activeLessonId = 1;
+        let activeTab = 'descripcion';
+
+        // Función para cambiar la pestaña activa
+        function setTab(tabId) {
+            activeTab = tabId;
+            
+            // Ocultar todas las pestañas
+            document.getElementById('tab-content-descripcion').classList.add('hidden');
+            document.getElementById('tab-content-recursos').classList.add('hidden');
+            document.getElementById('tab-content-comentarios').classList.add('hidden');
+            
+            // Resetear estilos de botones
+            const btns = ['descripcion', 'recursos', 'comentarios'];
+            btns.forEach(id => {
+                const btn = document.getElementById(`tab-btn-${id}`);
+                btn.className = "py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-colors border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300";
+            });
+
+            // Mostrar la pestaña activa y aplicar estilos al botón
+            document.getElementById(`tab-content-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+            activeBtn.className = "py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-colors border-indigo-600 text-indigo-600";
+        }
+
+        // Función para cambiar de lección
+        function setLesson(id) {
+            activeLessonId = id;
+            const lesson = lessons.find(l => l.id === id);
+
+            // 1. Actualizar Título
+            document.getElementById('lesson-main-title').innerText = lesson.title;
+
+            // 2. Actualizar Reproductor (Video o Quiz)
+            const videoContainer = document.getElementById('video-container');
+            const quizContainer = document.getElementById('quiz-container');
+            
+            if (lesson.type === 'video') {
+                videoContainer.classList.remove('hidden');
+                quizContainer.classList.add('hidden');
+                document.getElementById('yt-iframe').src = `https://www.youtube.com/embed/${lesson.videoId}?si=FnmqTURgmIJ3_DxI`;
+            } else {
+                videoContainer.classList.add('hidden');
+                quizContainer.classList.remove('hidden');
+                document.getElementById('quiz-title').innerText = lesson.title;
+            }
+
+            // 3. Actualizar Contenido de la Descripción
+            document.getElementById('desc-lesson-1').classList.add('hidden');
+            document.getElementById('desc-lesson-2').classList.add('hidden');
+            document.getElementById('desc-lesson-3').classList.add('hidden');
+            document.getElementById(`desc-lesson-${id}`).classList.remove('hidden');
+
+            // 4. Volver a renderizar la lista del sidebar para actualizar colores
+            renderSidebar();
+        }
+
+        // Función para renderizar el menú lateral
+        function renderSidebar() {
+            const container = document.getElementById('lessons-list');
+            container.innerHTML = ''; // Limpiar
+
+            lessons.forEach(lesson => {
+                const isActive = activeLessonId === lesson.id;
+                
+                // Estilos dinámicos
+                const wrapperClass = isActive 
+                    ? "px-4 py-3 flex gap-3 cursor-pointer group transition-colors bg-indigo-50 border-l-4 border-indigo-600"
+                    : "px-4 py-3 flex gap-3 cursor-pointer group transition-colors hover:bg-slate-100 border-l-4 border-transparent";
+                
+                const iconClass = isActive 
+                    ? "h-4 w-4 text-indigo-600" 
+                    : "h-4 w-4 text-slate-400 group-hover:text-slate-600";
+                
+                const titleClass = isActive 
+                    ? "text-sm leading-tight font-semibold text-indigo-900" 
+                    : "text-sm leading-tight font-medium text-slate-600 group-hover:text-slate-800";
+                
+                const durationClass = isActive 
+                    ? "text-xs mt-1 flex items-center gap-1 text-indigo-600 font-medium" 
+                    : "text-xs mt-1 flex items-center gap-1 text-slate-400";
+
+                const iconName = lesson.type === 'video' ? 'play-circle' : 'file-text';
+
+                // Crear HTML
+                const itemHTML = `
+                    <div onclick="setLesson(${lesson.id})" class="${wrapperClass}">
+                        <div class="mt-0.5">
+                            <i data-lucide="${iconName}" class="${iconClass}"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="${titleClass}">${lesson.title}</h4>
+                            <span class="${durationClass}">${lesson.duration}</span>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += itemHTML;
+            });
+
+            // Re-renderizar iconos de Lucide creados dinámicamente
+            lucide.createIcons();
+        }
+
+        // Inicializar aplicación
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSidebar();
+            lucide.createIcons();
+        });
+
+    </script>
+</body>
+</html>
